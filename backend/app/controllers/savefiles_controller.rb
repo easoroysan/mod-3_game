@@ -5,8 +5,8 @@ class SavefilesController < ApplicationController
     end
 
     def create
-     save_file = Savefile.create(allowed_params)
-     render json: save_file, methods: [:user]
+        save_file = Savefile.create(allowed_params)
+        render json: save_file, methods: [:user]
     end
 
     def show
