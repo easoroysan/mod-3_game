@@ -1,7 +1,7 @@
 # mod-3_game
 project for module 3 of flatiron school
 
-When loading, make sure to change the link in 'frontend/src/variables.js' for animationURL to the full path for your computer of that folder name (folders for animations are in "animations") ex: 'file:///Users/flatironschool/Desktop/mod-3_game/frontend/animations'. The code needs the full path there since it sometimes compares actions based on animations.
+When loading, rails db:migrate and rails:db seed in the backend folder. Then make sure to change the link in 'frontend/src/variables.js' for animationURL to the full path for your computer of that folder name (folders for animations are in "animations") ex: 'file:///Users/flatironschool/Desktop/mod-3_game/frontend/animations'. The code needs the full path there since it sometimes compares actions based on animations.
 
 Also, in 'variables.js', you will have to change the userURL and savefilesURL to whatever URL your database uses
 
