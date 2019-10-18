@@ -28,8 +28,9 @@ http://galeotealbert.com/quebec/how-to-fix-keyboard-arrow-keys.php
 
 
 #Bugs/Improvements
--spamming slash button with no directions glitches character (not sure if this still happens)
--character max walking height doesn't changed based on background (looks like characters are walking in the sky)
--impement bcrypt
--add bosses
--change database to Postgres instead of SQLite
+spamming slash button with no directions glitches character (not sure if this still happens)
+character max walking height doesn't changed based on background (looks like characters are walking in the sky)
+impement bcrypt
+add bosses
+change database to Postgres instead of SQLite
+save image/gif background rather than referencing another url in the css files
