@@ -6,7 +6,7 @@ class Boss extends Character{
 
     constructor(x,y){
 
-        super(x,y,'/Users/flatironschool/Desktop/mod-3_game/frontend/animations/boss')
+        super(x,y,`${animationURL}/boss`)
 
         this.element.style.width = '100px'
         this.element.style.height = '100px'
