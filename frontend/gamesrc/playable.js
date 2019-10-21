@@ -30,12 +30,11 @@ class PlayableCharacter extends Character{
         //recording keyboard inputs
         document.addEventListener('keydown', (e)=> {
 
-            //checks for animation after slash is complete
-            //this ensures player is not stuck in slash animation when changing direction
-            this.slashCheck = false
-
             //save downkey to check how to stop on up keys
-            this.downkey = e.key
+            if(e.key.includes('Arrow')){
+                this.downkey = e.key
+            }
+
             if(this.dead){
                 this.downkey = null
             }
@@ -45,26 +44,25 @@ class PlayableCharacter extends Character{
                 return
             }
 
-            if(this.downkey == 'ArrowUp'){
+            if(e.key == 'ArrowUp'){
                 this.runUp()
             }
-            if(this.downkey == 'ArrowDown'){
+            if(e.key == 'ArrowDown'){
                 this.runDown()
             }
-            if(this.downkey == 'ArrowLeft'){
+            if(e.key == 'ArrowLeft'){
                 this.runLeft()
             }
-            if(this.downkey == 'ArrowRight'){
+            if(e.key == 'ArrowRight'){
                 this.runRight()
             }
-            if(this.downkey == ' ' && !this.element.src.includes("slash")){
+            if(e.key == ' ' && !this.element.src.includes("slash")){
                 this.slash()
             }
         })
 
         //stops if no key is pressed
         document.addEventListener('keyup',(e)=>{
-
             
             this.upkey = e.key
             if(this.dead){
@@ -73,13 +71,13 @@ class PlayableCharacter extends Character{
             // logic to move in diagonal directions
             // also, if left/right is pressed down before right/left is lifted up, won't stop the character
             if( (this.upkey == 'ArrowLeft' && this.downkey != 'ArrowRight') || (this.upkey == 'ArrowRight' && this.downkey != 'ArrowLeft') ){
-                if(this.element.direction[0] == null){
+                if(this.element.direction[1] == null){
                     this.stop()
                 }else{
                     this.stop_x()
                 }
             }else if( (this.upkey == 'ArrowUp' && this.downkey != 'ArrowDown') || (this.upkey == 'ArrowDown' && this.downkey != 'ArrowUp') ){
-                if(this.element.direction[1] == null){
+                if(this.element.direction[0] == null){
                     this.stop()
                 }else{
                     this.stop_y()
@@ -87,9 +85,8 @@ class PlayableCharacter extends Character{
             }
 
             //checks for direction to use for slashing when idle
-            if(this.upkey !== ' ' && this.upkey){
+            if(this.upkey !== ' ' && this.upkey.includes('Arrow')){
                 this.idleDirection = this.upkey.slice(5)
-                this.slashCheck = false
             }
 
         })
@@ -100,71 +97,44 @@ class PlayableCharacter extends Character{
     }
 
 
-    // slashes is whichever direction player is facing or was last facing
+    // slashes is whichever direction player is walking or the last direction that was let go (prioritize left or right)
     slash(){
-        if(this.directionCheck('Right')){
-            this.slashanimation('Right')
+        if(this.element.direction[0]){
+            this.slashanimation(this.element.direction[0])
         }
-        if(this.directionCheck('Left')){
-            this.slashanimation('Left')
+        else if(this.element.direction[1]){
+            this.slashanimation(this.element.direction[1])
         }
-        if(this.directionCheck('Up')){
-            this.slashanimation('Up')
+        else{
+            this.slashanimation(this.idleDirection)
         }
-        if(this.directionCheck('Down')){
-            this.slashanimation('Down')
-        }
-        if(this.element.src === `${this.ASSET_ROOT}/idle.gif`){
-            let string = this.upkey
-            this.slashanimation(string.slice(5))
-        }
-    }
-
-    // boolean statement to see what direction the character was facing
-    directionCheck(direction){
-        return this.element.src === `${this.ASSET_ROOT}/run${direction}.gif` || this.element.src === `${this.ASSET_ROOT}/slash${direction}.gif`
     }
 
     //animation for slash
     slashanimation(direction){
-        this.slashCheck = true
 
-        // put idle checks for if the player was idle before slash animation starts
-        let idleCheck = false
-        if(this.element.src === `${this.ASSET_ROOT}/idle.gif`){
-            idleCheck = true
-            direction = this.idleDirection
-        }
-
-        // boolean to say that slash animation is not finished
-        this.finishSlash = false
+        // set hit and animation direction of sword for sword hitbox
         this.element.src = `${this.ASSET_ROOT}/slash${direction}.gif`
-
-        // set hit direction of sword for sword hitbox
         this.hitDirection = direction
-        this.hitbox()
+        this.hitbox(this.hitDirection)
 
         if(!this.dead){
             setTimeout( ()=>{
-                // boolean to say slash animation is finished
-                this.finishSlash = true
-                
-                // put idle checks for if the player was idle before slash animation starts
-                if(this.element.src === `${this.ASSET_ROOT}/idle.gif`){
-                    idleCheck = true
-                }
-                
-                //checks if player moved direction before slash animation was complete
-                if(this.slashCheck && !idleCheck && !this.dead){
-                    this.element.src = `${this.ASSET_ROOT}/run${direction}.gif`
-                
-                // checks if player stopped moving before slash animation was complete
-                }else if(idleCheck && !this.dead){
-                    this.element.src = `${this.ASSET_ROOT}/idle.gif`
-                }else if(this.dead){
+                // will put player in death animation if they were killed while slashing
+                if(this.dead){
                     this.element.src = `${this.ASSET_ROOT}/death.gif`
+                }
+                // checks if player is moving left or right
+                else if(this.element.direction[0]){
+                    this.element.src = `${this.ASSET_ROOT}/run${this.element.direction[0]}.gif`
+                
+                // checks if player is moving up or down
+                }else if(this.element.direction[1]){
+                    this.element.src = `${this.ASSET_ROOT}/run${this.element.direction[1]}.gif`
+
+                // puts player in idle animation if not moving and still alive
                 }else{
-                    this.element.src = this.storedAnimation
+                    this.element.src = `${this.ASSET_ROOT}/idle.gif`
                 }
                 
                 //turns off hitbox at the end of the 200 milliseconds

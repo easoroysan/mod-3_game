@@ -206,7 +206,7 @@ class Level{
         }
 
         //fetch request to save
-        fetch(`http://localhost:3000/savefiles/${this.savefile.id}`,{
+        fetch(`${fetchURL}/savefiles/${this.savefile.id}`,{
             method:'PATCH',
             headers: {
                 "Content-Type":'application/json',

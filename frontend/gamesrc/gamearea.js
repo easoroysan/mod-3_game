@@ -11,7 +11,7 @@ class GameArea{
         this.exitButton.addEventListener('click',()=>this.exitGame())
 
         //gets savefile
-        fetch(`http://localhost:3000/savefiles/${savefile_id}`)
+        fetch(`${fetchURL}/savefiles/${savefile_id}`)
         .then(response => response.json())
         .then(savefile => {
             this.savefile = savefile

@@ -18,7 +18,7 @@ class UserPage{
         newDiv.append(newh1)
 
         newh1.addEventListener('click',()=>{
-            fetch(`http://localhost:3000/savefiles`,{ 
+            fetch(`${fetchURL}/savefiles`,{ 
             method:'POST',
             headers: {
                 "Content-Type":'application/json',
@@ -40,7 +40,7 @@ class UserPage{
 
         //makes divs for each save file. fetching for when user obect passed does not have savefiles listed
         let count = 1
-        fetch(`http://localhost:3000/users/${this.user.id}`)
+        fetch(`${fetchURL}/users/${this.user.id}`)
         .then(response => response.json())
         .then( desiredUser => {
             desiredUser.savefiles.forEach((file)=>{
@@ -103,7 +103,7 @@ class UserPage{
         deleteButton.addEventListener('click',()=>{
             let deleteSavefile = confirm("Are you sure you want to delete this savefile? If this is a high score, it will remove it from the high score board.")
             if(deleteSavefile){
-                fetch(`http://localhost:3000/savefiles/${file.id}`, {method:'DELETE'})
+                fetch(`${fetchURL}/savefiles/${file.id}`, {method:'DELETE'})
                 .then(()=>div.remove())
             }
         })
@@ -132,7 +132,7 @@ class UserPage{
     deleteAccount(){
         let deletion = confirm('Are you sure you want to delete your account? This will delete all of your save files and high scores.')
         if(deletion){
-            fetch(`http://localhost:3000/users/${this.user.id}`, {method:'DELETE'})
+            fetch(`${fetchURL}/users/${this.user.id}`, {method:'DELETE'})
             this.logout()
         }
     }

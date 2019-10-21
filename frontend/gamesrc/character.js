@@ -20,9 +20,6 @@ class Character{
         //checks if character is dead or not
         this.dead = false
 
-        //stores an animation to use after it finishes slashing something
-        this.storedAnimation = null
-
         //keeps track of all characters
         Character.all.push(this)
 
@@ -34,26 +31,26 @@ class Character{
     
             // If the character is moving, the distance between him and the left/bottom side of the screen should change
             // also added logic here for him to not move off screen
-            if(this.element.direction[1] == 'right'){
-                if ( document.documentElement.clientWidth >= (left+80) ){
+            if(this.element.direction[0] == 'Right'){
+                if ( (left+100) <= document.documentElement.clientWidth ){
                     this.element.style.left = `${left+this.speed}px`;
                 }
             }
             
-            if(this.element.direction[1] == 'left'){
+            if(this.element.direction[0] == 'Left'){
                 if ( left+10 > 0 ){
                     this.element.style.left = `${left-this.speed}px`;
                 }
             }
     
-            if(this.element.direction[0] == 'up'){
-                if ( document.documentElement.clientHeight >= (bottom+240) ){
+            if(this.element.direction[1] == 'Up'){
+                if ( (bottom+240) <= document.documentElement.clientHeight ){
                     this.element.style.bottom = `${bottom+this.speed}px`;
                 }
             }
     
-            if(this.element.direction[0] == 'down'){
-                if ( bottom - 10 > 0 ){
+            if(this.element.direction[1] == 'Down'){
+                if ( bottom > 0 ){
                     this.element.style.bottom = `${bottom-this.speed}px`;
                 }
             }
@@ -64,40 +61,40 @@ class Character{
 
     //changes direction and image depending on what key is pressed/let go
     runRight(){
-        this.element.direction[1] = 'right'
+        this.element.direction[0] = 'Right'
         if(!this.element.src.includes("slash")){
             this.element.src = `${this.ASSET_ROOT}/runRight.gif`
-        }else{
-            this.storedAnimation =  `${this.ASSET_ROOT}/runRight.gif`
         }
     }
 
     runLeft(){
-        this.element.direction[1] = 'left'
+        this.element.direction[0] = 'Left'
         if(!this.element.src.includes("slash")){
             this.element.src = `${this.ASSET_ROOT}/runLeft.gif`
-        }else{
-            this.storedAnimation =  `${this.ASSET_ROOT}/runLeft.gif`
         }
     }
 
     runUp(){
-        this.element.direction[0] = 'up'
-
+        this.element.direction[1] = 'Up'
         if(!this.element.src.includes("slash")){
-            this.element.src = `${this.ASSET_ROOT}/runUp.gif`
-        }else{
-            this.storedAnimation =  `${this.ASSET_ROOT}/runUp.gif`
+            if(this.element.direction[0]){
+                this.element.src = `${this.ASSET_ROOT}/run${this.element.direction[0]}.gif`
+            }
+            else{
+                this.element.src = `${this.ASSET_ROOT}/runUp.gif`
+            }
         }
     }
 
     runDown(){
-        this.element.direction[0] = 'down'
-
+        this.element.direction[1] = 'Down'
         if(!this.element.src.includes("slash")){
-            this.element.src = `${this.ASSET_ROOT}/runDown.gif`
-        }else{
-            this.storedAnimation =  `${this.ASSET_ROOT}/runDown.gif`
+            if(this.element.direction[0]){
+                this.element.src = `${this.ASSET_ROOT}/run${this.element.direction[0]}.gif`
+            }
+            else{
+                this.element.src = `${this.ASSET_ROOT}/runDown.gif`
+            }
         }
     }
 
@@ -105,43 +102,28 @@ class Character{
         this.element.direction = [null,null]
         if(!this.element.src.includes("slash")){
             this.element.src = `${this.ASSET_ROOT}/idle.gif`
-        }else{
-            this.storedAnimation = `${this.ASSET_ROOT}/idle.gif`
         }
     }
 
     //functions to stop depending on what direction is let go. also makes sure to face correct direction if still walking
     stop_x(){
-        this.element.direction[1] = null
-        if(this.element.direction[0]=='up'){
-            if(!this.element.src.includes("slash")){
+        this.element.direction[0] = null
+        if(!this.element.src.includes("slash")){
+            if(this.element.direction[1]=='Up'){
                 this.element.src = `${this.ASSET_ROOT}/runUp.gif`
-            }else{
-                this.storedAnimation =  `${this.ASSET_ROOT}/runUp.gif`
-            }
-        }else if(this.element.direction[0]=='down'){
-            if(!this.element.src.includes("slash")){
+            }else if(this.element.direction[1]=='Down'){
                 this.element.src = `${this.ASSET_ROOT}/runDown.gif`
-            }else{
-                this.storedAnimation =  `${this.ASSET_ROOT}/runDown.gif`
             }
         }
     }
 
     stop_y(){
-        this.element.direction[0] = null
-        
-        if(this.element.direction[1]=='left'){
-            if(!this.element.src.includes("slash")){
+        this.element.direction[1] = null
+        if(!this.element.src.includes("slash")){
+            if(this.element.direction[1]=='Left'){
                 this.element.src = `${this.ASSET_ROOT}/runLeft.gif`
-            }else{
-                this.storedAnimation =  `${this.ASSET_ROOT}/runLeft.gif`
-            }
-        }else if(this.element.direction[1]=='right'){
-            if(!this.element.src.includes("slash")){
+            }else if(this.element.direction[1]=='Right'){
                 this.element.src = `${this.ASSET_ROOT}/runRight.gif`
-            }else{
-                this.storedAnimation =  `${this.ASSET_ROOT}/runRight.gif`
             }
         }
     }
