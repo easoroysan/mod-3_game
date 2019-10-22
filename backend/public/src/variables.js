@@ -1,6 +1,6 @@
 let c = (element) => document.createElement(element)
 let s = (element) => document.querySelector(element)
-const fetchURL = 'http://34.67.244.83'
+const fetchURL = 'http://35.223.118.155'
 const userURL = `${fetchURL}/users`
 const saveURL = `${fetchURL}/savefiles`
 const styleLink = './style/home.css'
