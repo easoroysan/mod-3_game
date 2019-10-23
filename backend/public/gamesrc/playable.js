@@ -259,9 +259,9 @@ class PlayableCharacter extends Character{
             this.defense--
         }
         if(this.defense == 5){
-            this.defenseBar.src = this.ASSET_ROOT + `/Defense/Value_5.gif`
+            this.defenseBar.src = this.ASSET_ROOT + `/defense/Value_5.gif`
         }else{
-            this.defenseBar.src = this.ASSET_ROOT + `/Defense/Value_${this.defense}.png`
+            this.defenseBar.src = this.ASSET_ROOT + `/defense/Value_${this.defense}.png`
         }
     }
 
