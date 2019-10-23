@@ -253,15 +253,15 @@ class PlayableCharacter extends Character{
         }
     }
 
-    //displays defense as falshing if 5 or normal if anything else. if reducing, will reduce defense.
+    //displays defense as flashing if 5 or normal if anything else. if reducing, will reduce defense.
     reduceDefense(reduce = true){
         if(reduce){
             this.defense--
         }
         if(this.defense == 5){
-            this.defenseBar.src = this.ASSET_ROOT + `/defense/Value_5.gif`
+            this.defenseBar.src = this.ASSET_ROOT + `/Defense/Value_5.gif`
         }else{
-            this.defenseBar.src = this.ASSET_ROOT + `/defense/Value_${this.defense}.png`
+            this.defenseBar.src = this.ASSET_ROOT + `/Defense/Value_${this.defense}.png`
         }
     }
 
