@@ -1,61 +1,61 @@
 class HomePage {
 	constructor() {
-		//creates title on home page
+		// creates title on home page
 		this.h1 = c('h1')
 		this.h1.innerText = 'Monster Hunter 8-Bit'
 		this.h1.className = 'main-title'
 
-		//create account option
+		// create account option
 		let newUserh2 = c('h2')
 		newUserh2.innerText = 'Create Account'
 		newUserh2.className = 'options'
 		newUserh2.addEventListener('click', () => this.newUser())
 
-		//login option
+		// login option
 		let loginh2 = c('h2')
 		loginh2.innerText = 'Log In'
 		loginh2.className = 'options'
 		loginh2.addEventListener('click', () => this.login())
 
-		//option to check high scores
+		// option to check high scores
 		let highScoresh2 = c('h2')
 		highScoresh2.innerText = 'High Scores'
 		highScoresh2.className = 'options'
 		highScoresh2.addEventListener('click', () => this.highScores())
 
-		//Instructions to play game
+		// Instructions to play game
 		let instructionsh2 = c('h2')
 		instructionsh2.innerText = 'Instructions'
 		instructionsh2.className = 'options'
 		instructionsh2.addEventListener('click', () => this.instructions())
 
-		//creates div of options and appends options to the div
+		// creates div of options and appends options to the div
 		this.optionsdiv = c('div')
 		this.optionsdiv.className = 'options-div'
 		this.optionsdiv.append(newUserh2, loginh2, highScoresh2, instructionsh2)
 
-		//creates div for forms/high score list and starts with login form
+		// creates div for forms/high score list and starts with login form
 		this.listdiv = c('div')
 		this.listdiv.className = 'list-div'
 		this.login()
 
-		//div for all homepage divs
+		// div for all homepage divs
 		this.homeDiv = c('div')
 		this.homeDiv.className = 'home-div'
 		this.homeDiv.append(this.optionsdiv, this.listdiv)
 	}
 
-	//renders everything to the body of the document
+	// renders everything to the body of the document
 	render() {
 		document.body.innerHTML = ''
 		this.login()
 		document.body.append(this.h1, this.homeDiv)
 
-		//from source.js folder. loads where background of home page is from
+		// from source.js folder. loads where background of home page is from
 		loadSource()
 	}
 
-	//renders account creation into listdiv
+	// renders account creation into listdiv
 	newUser() {
 		this.listdiv.innerText = ''
 		let h2 = c('h2')
@@ -64,7 +64,7 @@ class HomePage {
 		this.newUserForm()
 	}
 
-	//form to create account
+	// form to create account
 	newUserForm() {
 		let form = c('form')
 		let usernameInput = c('input')
@@ -74,7 +74,7 @@ class HomePage {
 		let passwordInput = c('input')
 		passwordInput.type = 'password'
 		passwordInput.placeholder = 'Password'
-		//another field to confirm password when creating an account
+		// another field to confirm password when creating an account
 		let passwordConfirm = c('input')
 		passwordConfirm.type = 'password'
 		passwordConfirm.placeholder = 'Confirm Password'
@@ -98,7 +98,7 @@ class HomePage {
 		this.listdiv.append(form)
 	}
 
-	//creates new user
+	// creates new user
 	createUser(e, usernameInput, passwordInput, passwordConfirm) {
 		e.preventDefault()
 
@@ -144,7 +144,7 @@ class HomePage {
 		}
 	}
 
-	//renders login info into listdiv
+	// renders login info into listdiv
 	login(name = null) {
 		this.listdiv.innerText = ''
 		let h2 = c('h2')
@@ -153,7 +153,7 @@ class HomePage {
 		this.loginForm(name)
 	}
 
-	//form to log in
+	// form to log in
 	loginForm(name) {
 		let form = c('form')
 		let usernameInput = c('input')
@@ -176,18 +176,18 @@ class HomePage {
 		this.listdiv.append(form)
 	}
 
-	//directs to User's page
+	// directs to User's page
 	userPage(e, usernameInput, passwordInput) {
 		e.preventDefault()
 
-		//fetch users
+		// fetch users
 		fetch(userURL)
 			.then((response) => response.json())
 			.then((users) => {
 				let desiredUser = users.find(
 					(user) => user.username === usernameInput.value
 				)
-				//checks if username exists and if password is correct
+				// checks if username exists and if password is correct
 				if (desiredUser && desiredUser.password === passwordInput.value) {
 					let userPage = new UserPage(desiredUser)
 					userPage.render()
@@ -199,7 +199,7 @@ class HomePage {
 			})
 	}
 
-	//puts high scores in listdiv
+	// puts high scores in listdiv
 	highScores() {
 		fetch(saveURL)
 			.then((response) => response.json())
@@ -217,7 +217,8 @@ class HomePage {
 			})
 	}
 
-	//arranges save files in order by level and then by time if level is tied
+	// arranges save files in order by level and then by time if level is tied
+	// only return first 10
 	organizeScores(files) {
 		files.sort(function(a, b) {
 			if (a.level === b.level) {
@@ -227,10 +228,10 @@ class HomePage {
 			}
 		})
 		let first_10_files = files.slice(0, 10)
-		return first_10_files //only return first 10
+		return first_10_files
 	}
 
-	//list the high scores
+	// list the high scores
 	listScores(file, ol) {
 		let li = c('li')
 		let display
@@ -243,7 +244,7 @@ class HomePage {
 		ol.append(li)
 	}
 
-	//function to give instructions
+	// function to give instructions
 	instructions() {
 		this.listdiv.innerText = ''
 		let h2 = c('h2')

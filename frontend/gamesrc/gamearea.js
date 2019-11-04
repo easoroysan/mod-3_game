@@ -9,14 +9,14 @@ class GameArea {
 		this.exitButton.innerText = 'Quit Game'
 		this.exitButton.addEventListener('click', () => this.exitGame())
 
-		//gets savefile
+		// gets savefile
 		fetch(`${fetchURL}/savefiles/${savefile_id}`)
 			.then((response) => response.json())
 			.then((savefile) => {
 				this.savefile = savefile
-				//clears page and changes which css file to use
+				// clears page and changes which css file to use
 				this.render()
-				//loads level based on savefile
+				// loads level based on savefile
 				new Level(this.savefile)
 			})
 

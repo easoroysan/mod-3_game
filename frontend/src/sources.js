@@ -1,4 +1,4 @@
-//puts background source on page for home and user page
+// puts background source on page for home and user page
 
 let loadSource = () => {
 	let sourcediv = c('div')

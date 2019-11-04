@@ -6,28 +6,28 @@ class PlayableCharacter extends Character {
 
 		PlayableCharacter.all.push(this)
 
-		//health for player
+		// health for player
 		this.health = health
 		this.healthBar = c('img')
 		this.healthBar.id = 'player-health'
 		this.reduceHealth(false)
 
-		//defense count for player
+		// defense count for player
 		this.defense = 5
 		this.defenseBar = c('img')
 		this.defenseBar.id = 'player-defense'
 		this.reduceDefense(false)
 
-		//determines if player is invincible/hurt
+		// determines if player is invincible/hurt
 		this.invincible = false
 
-		//will slash up on game start when slash button is pressed
+		// will slash up on game start when slash button is pressed
 		this.upkey = 'ArrowUp'
 		this.idleDirection = 'up'
 
-		//recording keyboard inputs
+		// recording keyboard inputs
 		document.addEventListener('keydown', (e) => {
-			//save downkey to check how to stop on up keys
+			// save downkey to check how to stop on up keys
 			if (e.key.includes('Arrow')) {
 				this.downkey = e.key
 			}
@@ -57,7 +57,7 @@ class PlayableCharacter extends Character {
 			}
 		})
 
-		//stops if no key is pressed
+		// stops if no key is pressed
 		document.addEventListener('keyup', (e) => {
 			this.upkey = e.key
 			if (this.dead) {
@@ -85,7 +85,7 @@ class PlayableCharacter extends Character {
 				}
 			}
 
-			//checks for direction to use for slashing when idle
+			// checks for direction to use for slashing when idle
 			if (this.upkey !== ' ' && this.upkey.includes('Arrow')) {
 				this.idleDirection = this.upkey.slice(5)
 			}
@@ -107,7 +107,7 @@ class PlayableCharacter extends Character {
 		}
 	}
 
-	//animation for slash
+	// animation for slash
 	slashanimation(direction) {
 		// set hit and animation direction of sword for sword hitbox
 		this.element.src = `${this.ASSET_ROOT}/slash${direction}.gif`
@@ -137,7 +137,7 @@ class PlayableCharacter extends Character {
 					this.element.src = `${this.ASSET_ROOT}/idle.gif`
 				}
 
-				//turns off hitbox at the end of the 200 milliseconds
+				// turns off hitbox at the end of the 200 milliseconds
 				this.hitDirection = null
 			}, 200)
 		}
@@ -238,7 +238,7 @@ class PlayableCharacter extends Character {
 		}
 	}
 
-	//displays health as falshing if 1 or normal if anything else. if reducing, will reduce health.
+	// displays health as falshing if 1 or normal if anything else. if reducing, will reduce health.
 	reduceHealth(reduce = true) {
 		if (reduce) {
 			this.health--
@@ -250,7 +250,7 @@ class PlayableCharacter extends Character {
 		}
 	}
 
-	//displays defense as flashing if 5 or normal if anything else. if reducing, will reduce defense.
+	// displays defense as flashing if 5 or normal if anything else. if reducing, will reduce defense.
 	reduceDefense(reduce = true) {
 		if (reduce) {
 			this.defense--

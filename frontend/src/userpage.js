@@ -5,10 +5,10 @@ class UserPage {
 		this.h1.innerText = `Hello ${this.user.username.toUpperCase()}`
 		this.h1.className = 'main-title'
 
-		//div for save file divs
+		// div for save file divs
 		this.optionsdiv = c('div')
 
-		//div for new file
+		// div for new file
 		let newDiv = c('div')
 		newDiv.className = 'save-file'
 		let newh1 = c('h1')
@@ -37,7 +37,7 @@ class UserPage {
 				})
 		})
 
-		//makes divs for each save file. fetching for when user obect passed does not have savefiles listed
+		// makes divs for each save file. fetching for when user obect passed does not have savefiles listed
 		let count = 1
 		fetch(`${fetchURL}/users/${this.user.id}`)
 			.then((response) => response.json())
@@ -50,13 +50,13 @@ class UserPage {
 
 		this.optionsdiv.append(newDiv)
 
-		//logout button
+		// logout button
 		this.logoutbutton = c('button')
 		this.logoutbutton.innerText = 'Log Out'
 		this.logoutbutton.className = 'logout'
 		this.logoutbutton.addEventListener('click', () => this.logout())
 
-		//delete account button
+		// delete account button
 		this.deleteAccountButton = c('button')
 		this.deleteAccountButton.innerText = 'Delete Account'
 		this.deleteAccountButton.className = 'delete-account'
@@ -101,7 +101,7 @@ class UserPage {
 		health.className = 'save-info'
 		health.innerText = 'Health: ' + file.health
 
-		//delete account button
+		// delete account button
 		let deleteButton = c('button')
 		deleteButton.innerText = 'Delete'
 		deleteButton.className = 'button-savefile'
@@ -116,7 +116,7 @@ class UserPage {
 			}
 		})
 
-		//delete account button
+		// delete account button
 		let loadButton = c('button')
 		loadButton.innerText = 'Load'
 		loadButton.className = 'button-savefile'

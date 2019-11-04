@@ -1,74 +1,82 @@
 class Level {
-	//keeps track of time
+	// keeps track of time
 	static time
 
 	constructor(savefile) {
-		//clears out any monsters or bosses that were created before
+		// clears out any monsters or bosses that were created before
 		Monster.all = []
 		Boss.all = []
 
 		this.savefile = savefile
 
-		//checks to make sure savefile is not greater than 20
+		// checks to make sure savefile is not greater than 20
 		if (this.savefile.level > 20) {
 			this.savefile.level = 20
 		}
 
-		//sets start time
+		// sets start time
 		Level.time = this.savefile.time
 		this.tracker = c('h3')
 		this.tracker.id = 'time-tracker'
 		this.tracker.innerText = `Time: ${Level.time}`
 		document.body.append(this.tracker)
 
-		//shows what level player is on
+		// shows what level player is on
 		let showLevel = c('h3')
 		showLevel.id = 'show-level'
 		showLevel.innerText = `Level: ${savefile.level}`
 		document.body.append(showLevel)
 
-		//resets monster health bar positions
+		// resets monster health bar positions
 		Monster.healthPosition = 15
 		Boss.healthPosition = 15
 		Monster.healthPositionChange = false
 		Boss.healthPositionChange = false
 
-		//loads player with proper health
+		// loads player with proper health
 		this.player = new PlayableCharacter(30, 60, savefile.health)
 		this.player.render()
 
-		//load directions if player is starting level 1
+		// load directions if player is starting level 1
 		if (savefile.level == 1) {
 			this.directions()
 		}
 
-		//creates monsters based on level number
+		// creates monsters based on level number
 		for (let i = 0; i < this.savefile.level; i++) {
-			//health of monsters will increase after every 5 levels
-			//levels 1-5: 20hp, 6-10 40hp, 11-15 60hp, 16-20 80hp
-			let health = 20 * (parseInt((this.savefile.level - 1) / 5) + 1)
+			// health of monsters will increase after every 5 levels
+			// levels 1-5: 20hp, 6-10 40hp, 10-15 60hp, 15-20 80hp
+			let health = 20 * parseInt((this.savefile.level + 4) / 5)
 			let slimemonster = new Monster(500, 500, health)
 			slimemonster.render()
 
-			//checks if monster is hit by sword or player is hit by monster every 20 ms
-			setInterval(() => {
+			// checks if monster is hit by sword or player is hit by monster every 20 ms
+			let damageCheck = setInterval(() => {
 				slimemonster.hurt(this.player)
 				this.player.hurt(slimemonster)
+
+				if (this.player.dead) {
+					clearInterval(damageCheck)
+				}
 			}, 20)
 		}
 
-		//creates 1 more boss monster every 5 levels.
+		// creates 1 more boss monster every 5 levels.
 		for (let i = 0; i < parseInt(this.savefile.level / 5); i++) {
 			let skullBoss = new Boss(600, 500)
 			skullBoss.render()
 
-			setInterval(() => {
+			let damageCheck = setInterval(() => {
 				skullBoss.hurt(this.player)
 				this.player.hurt(skullBoss)
+
+				if (this.player.dead) {
+					clearInterval(damageCheck)
+				}
 			}, 20)
 		}
 
-		let interval = setInterval(() => {
+		let levelInterval = setInterval(() => {
 			Level.time++
 			this.tracker.innerText = `Time: ${Level.time}`
 			let monsterCheck = Monster.all.filter((monster) => monster.dead)
@@ -76,38 +84,45 @@ class Level {
 			if (this.player.dead) {
 				this.player.gameOver()
 				setTimeout(() => {
-					//puts status box with defeat text and options
+					// puts status box with defeat text and options
 					this.defeat()
 				}, 3000)
 
-				//ends setInterval
-				clearInterval(interval)
+				// ends setIntervals
+				clearInterval(levelInterval)
+				monsterCheck.forEach((monster) => {
+					clearInterval(monster.movementInterval)
+				})
+				bossCheck.forEach((boss) => {
+					clearInterval(boss.movementInterval)
+				})
 			} else if (
 				monsterCheck.length == Monster.all.length &&
 				bossCheck.length == Boss.all.length &&
 				Monster.all.length !== 0
 			) {
-				//stops player from moving
+				// stops player from moving
 				this.player.stop()
 
-				//puts status box with victory
+				// puts status box with victory
 				this.victory()
 
-				//ends setInterval
-				clearInterval(interval)
+				// ends setInterval
+				// since monsters and bosses clear their intervals when they die, we don't need to clear it here
+				clearInterval(levelInterval)
 			}
 		}, 20)
 	}
 
 	directions() {
-		//directions box
+		// directions box
 		let statusBox = c('div')
 		statusBox.id = 'status-box'
 		let statusText = c('h1')
 		statusText.id = 'status-text'
 		statusText.innerText = 'Directions'
 
-		//arrow-keys and space bar pictures
+		// arrow-keys and space bar pictures
 		let arrow = c('div')
 		arrow.className = 'direction-box'
 		let arrowImage = c('img')
@@ -135,12 +150,12 @@ class Level {
 			this.tracker.innerText = `Time: ${Level.time}`
 		}, 1000)
 		if (this.savefile.level < 20) {
-			//if player beat level under level 20
+			// if player beat level under level 20
 			this.endScreen('Level Complete', 'Save & Continue', 'Save & Quit')
 			this.option1.addEventListener('click', () => this.save(false))
 			this.option2.addEventListener('click', () => this.save(true))
 		} else {
-			//if player beat level 20
+			// if player beat level 20
 			this.endScreen('YOU WIN!', 'No More Levels', 'Save & Quit')
 			this.option1.addEventListener('click', () => this.save(false))
 			this.option2.addEventListener('click', () => this.save(true))
@@ -159,13 +174,13 @@ class Level {
 	}
 
 	endScreen(stringStatus, string1, string2) {
-		//status div box for if player wins or dies
+		// status div box for if player wins or dies
 		let statusBox = c('div')
 		statusBox.id = 'status-box'
 		let statusText = c('h1')
 		statusText.id = 'status-text'
 
-		//option boxes for when player wins/loses
+		// option boxes for when player wins/loses
 		this.option1 = c('div')
 		this.option1.className = 'option-box'
 		let option1Text = c('h2')
@@ -191,17 +206,17 @@ class Level {
 	}
 
 	save(quit) {
-		//adds one health if health is less than 5
+		// adds one health if health is less than 5
 		if (this.player.health < 5) {
 			this.player.health++
 		}
 
-		//makes sure not to save anything past level 20
+		// makes sure not to save anything past level 20
 		if (this.savefile.level > 20) {
 			this.savefile.level = 20
 		}
 
-		//fetch request to save
+		// fetch request to save
 		fetch(`${fetchURL}/savefiles/${this.savefile.id}`, {
 			method: 'PATCH',
 			headers: {

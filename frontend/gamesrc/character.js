@@ -1,8 +1,8 @@
-//class to make characters
+// class to make characters
 class Character {
 	static all = []
 
-	//initialize for javascript
+	// initialize for javascript
 	constructor(x, y, ROOT_URL) {
 		this.ASSET_ROOT = ROOT_URL
 		this.element = document.createElement('img')
@@ -16,13 +16,13 @@ class Character {
 		this.element.style.left = x + 'px'
 		this.element.style.bottom = y + 'px'
 
-		//checks if character is dead or not
+		// checks if character is dead or not
 		this.dead = false
 
-		//keeps track of all characters
+		// keeps track of all characters
 		Character.all.push(this)
 
-		setInterval(() => {
+		let commandInterval = setInterval(() => {
 			// character.style.left / bottom are both strings: "0px"
 			// If we want to do some arithmatic, we'll need to parse them into integers:
 			const left = parseInt(this.element.style.left)
@@ -34,9 +34,7 @@ class Character {
 				if (left + 100 <= document.documentElement.clientWidth) {
 					this.element.style.left = `${left + this.speed}px`
 				}
-			}
-
-			if (this.element.direction[0] == 'Left') {
+			} else if (this.element.direction[0] == 'Left') {
 				if (left + 10 > 0) {
 					this.element.style.left = `${left - this.speed}px`
 				}
@@ -46,17 +44,19 @@ class Character {
 				if (bottom + 240 <= document.documentElement.clientHeight) {
 					this.element.style.bottom = `${bottom + this.speed}px`
 				}
-			}
-
-			if (this.element.direction[1] == 'Down') {
+			} else if (this.element.direction[1] == 'Down') {
 				if (bottom > 0) {
 					this.element.style.bottom = `${bottom - this.speed}px`
 				}
 			}
+
+			if (this.dead) {
+				clearInterval(commandInterval)
+			}
 		}, 20)
 	}
 
-	//changes direction and image depending on what key is pressed/let go
+	// changes direction and image depending on what key is pressed/let go
 	runRight() {
 		this.element.direction[0] = 'Right'
 		if (!this.element.src.includes('slash')) {
@@ -104,7 +104,7 @@ class Character {
 		}
 	}
 
-	//functions to stop depending on what direction is let go. also makes sure to face correct direction if still walking
+	// functions to stop depending on what direction is let go. also makes sure to face correct direction if still walking
 	stop_x() {
 		this.element.direction[0] = null
 		if (!this.element.src.includes('slash')) {
