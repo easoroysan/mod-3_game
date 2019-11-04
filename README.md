@@ -31,3 +31,4 @@ implement bcrypt
 add bosses
 change database to Postgres instead of SQLite
 save image/gif background rather than referencing another url in the css files
+when attacking at moment of death, freezes animation and can still be controlled

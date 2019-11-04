@@ -6,4 +6,4 @@ const saveURL = `${fetchURL}/savefiles`
 const styleLink = './style/home.css'
 const gameLink = './style/game.css'
 const animationURL = './animations'
-let homePage 
+let homePage
