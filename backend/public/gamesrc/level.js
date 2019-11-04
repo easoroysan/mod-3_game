@@ -88,12 +88,18 @@ class Level {
 					this.defeat()
 				}, 3000)
 
+				// get all living monsters/bosses to clear intervals
+				let monsterAlive = Monster.all.filter((monster) => !monster.dead)
+				let bossAlive = Boss.all.filter((boss) => !boss.dead)
+
 				// ends setIntervals
 				clearInterval(levelInterval)
-				monsterCheck.forEach((monster) => {
+				monsterAlive.forEach((monster) => {
+					monster.stop()
 					clearInterval(monster.movementInterval)
 				})
-				bossCheck.forEach((boss) => {
+				bossAlive.forEach((boss) => {
+					boss.stop()
 					clearInterval(boss.movementInterval)
 				})
 			} else if (

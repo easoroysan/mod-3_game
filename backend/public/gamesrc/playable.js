@@ -21,79 +21,76 @@ class PlayableCharacter extends Character {
 		// determines if player is invincible/hurt
 		this.invincible = false
 
-		// will slash up on game start when slash button is pressed
-		this.upkey = 'ArrowUp'
-		this.idleDirection = 'up'
+		// will slash right on game start when slash button is pressed
+		this.upkey = 'ArrowRight'
+		this.idleDirection = 'right'
 
 		// recording keyboard inputs
-		document.addEventListener('keydown', (e) => {
-			// save downkey to check how to stop on up keys
-			if (e.key.includes('Arrow')) {
-				this.downkey = e.key
-			}
+		document.addEventListener('keydown', this.keydownFunction)
 
-			if (this.dead) {
-				this.downkey = null
-			}
-
-			if (event.repeat) {
-				return
-			}
-
-			if (e.key == 'ArrowUp') {
-				this.runUp()
-			}
-			if (e.key == 'ArrowDown') {
-				this.runDown()
-			}
-			if (e.key == 'ArrowLeft') {
-				this.runLeft()
-			}
-			if (e.key == 'ArrowRight') {
-				this.runRight()
-			}
-			if (e.key == ' ' && !this.element.src.includes('slash')) {
-				this.slash()
-			}
-		})
-
-		// stops if no key is pressed
-		document.addEventListener('keyup', (e) => {
-			this.upkey = e.key
-			if (this.dead) {
-				this.upkey = null
-			}
-			// logic to move in diagonal directions
-			// also, if left/right is pressed down before right/left is lifted up, won't stop the character
-			if (
-				(this.upkey == 'ArrowLeft' && this.downkey != 'ArrowRight') ||
-				(this.upkey == 'ArrowRight' && this.downkey != 'ArrowLeft')
-			) {
-				if (this.element.direction[1] == null) {
-					this.stop()
-				} else {
-					this.stop_x()
-				}
-			} else if (
-				(this.upkey == 'ArrowUp' && this.downkey != 'ArrowDown') ||
-				(this.upkey == 'ArrowDown' && this.downkey != 'ArrowUp')
-			) {
-				if (this.element.direction[0] == null) {
-					this.stop()
-				} else {
-					this.stop_y()
-				}
-			}
-
-			// checks for direction to use for slashing when idle
-			if (this.upkey !== ' ' && this.upkey.includes('Arrow')) {
-				this.idleDirection = this.upkey.slice(5)
-			}
-		})
+		// stops depending on what key is lifted up
+		document.addEventListener('keyup', this.keyupFunction)
 	}
 
 	render() {
 		document.body.append(this.element, this.healthBar, this.defenseBar)
+	}
+
+	keydownFunction = (e) => {
+		// save downkey to check how to stop on up keys
+		if (e.key.includes('Arrow')) {
+			this.downkey = e.key
+		}
+
+		if (event.repeat) {
+			return
+		}
+
+		if (e.key == 'ArrowUp') {
+			this.runUp()
+		}
+		if (e.key == 'ArrowDown') {
+			this.runDown()
+		}
+		if (e.key == 'ArrowLeft') {
+			this.runLeft()
+		}
+		if (e.key == 'ArrowRight') {
+			this.runRight()
+		}
+		if (e.key == ' ' && !this.element.src.includes('slash')) {
+			this.slash()
+		}
+	}
+
+	keyupFunction = (e) => {
+		this.upkey = e.key
+		// logic to move in diagonal directions
+		// also, if left/right is pressed down before right/left is lifted up, won't stop the character
+		if (
+			(this.upkey == 'ArrowLeft' && this.downkey != 'ArrowRight') ||
+			(this.upkey == 'ArrowRight' && this.downkey != 'ArrowLeft')
+		) {
+			if (this.element.direction[1] == null) {
+				this.stop()
+			} else {
+				this.stop_x()
+			}
+		} else if (
+			(this.upkey == 'ArrowUp' && this.downkey != 'ArrowDown') ||
+			(this.upkey == 'ArrowDown' && this.downkey != 'ArrowUp')
+		) {
+			if (this.element.direction[0] == null) {
+				this.stop()
+			} else {
+				this.stop_y()
+			}
+		}
+
+		// checks for direction to use for slashing when idle
+		if (this.upkey && this.upkey !== ' ' && this.upkey.includes('Arrow')) {
+			this.idleDirection = this.upkey.slice(5)
+		}
 	}
 
 	// slashes is whichever direction player is walking or the last direction that was let go (prioritize left or right)
@@ -265,6 +262,8 @@ class PlayableCharacter extends Character {
 
 	gameOver() {
 		this.dead = true
+		document.removeEventListener('keyup', this.keyupFunction)
+		document.removeEventListener('keydown', this.keydownFunction)
 		this.stop()
 		this.element.src = `${this.ASSET_ROOT}/death.gif`
 	}
