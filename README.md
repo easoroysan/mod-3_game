@@ -30,3 +30,5 @@ implement bcrypt
 add bosses
 change database to Postgres instead of SQLite
 save image/gif background rather than referencing another url in the css files
+keep highscore if player beat game and don't show savefile
+lower cap level to 10
