@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded',()=>{
-    homePage = new HomePage
-    homePage.render()
-})  
+document.addEventListener('DOMContentLoaded', () => {
+	homePage = new HomePage()
+	homePage.render()
+})
